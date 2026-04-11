@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Portal — Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" aria-label="Main navigation">
+        <div class="sidebar__brand">
+          <div class="sidebar__logo">Doctor <span>Portal</span></div>
+        </div>
+        <ul class="sidebar__nav">
+          <li>
+            <a href="index.html" class="is-active" aria-current="page">
+              <span class="sidebar__icon" aria-hidden="true">◆</span>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="sidebar__icon" aria-hidden="true">▣</span>
+              Doctors
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="sidebar__icon" aria-hidden="true">◇</span>
+              Patients
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="sidebar__icon" aria-hidden="true">▤</span>
+              Appointments
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="sidebar__icon" aria-hidden="true">⚙</span>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <div class="main-wrap">
+        <header class="topbar">
+          <div class="topbar__user">
+            <span class="topbar__name">Admin</span>
+            <div class="topbar__avatar" role="img" aria-label="Profile placeholder">AD</div>
+          </div>
+        </header>
+
+        <main class="content">
+          <h1 class="content__title">Dashboard</h1>
+          <p class="content__subtitle">Overview of your clinic operations and staff.</p>
+
+          <section class="cards-grid" aria-label="Summary statistics">
+            <article class="stat-card">
+              <div class="stat-card__label">Total Doctors</div>
+              <div class="stat-card__value">48</div>
+              <div class="stat-card__meta">+3 this month</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-card__label">Total Patients</div>
+              <div class="stat-card__value">12,640</div>
+              <div class="stat-card__meta">+8.2% vs last month</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-card__label">Appointments Today</div>
+              <div class="stat-card__value">156</div>
+              <div class="stat-card__meta">32 pending check-in</div>
+            </article>
+            <article class="stat-card stat-card--revenue">
+              <div class="stat-card__label">Revenue</div>
+              <div class="stat-card__value">$84.2k</div>
+              <div class="stat-card__meta">This month (est.)</div>
+            </article>
+          </section>
+
+          <section class="panel" aria-labelledby="doctors-heading">
+            <div class="panel__header">
+              <h2 id="doctors-heading" class="panel__title">Doctors</h2>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Specialization</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="link-quiet" href="doctor-profile.html">Dr. John Doe</a></td>
+                    <td>Cardiologist</td>
+                    <td>john.doe@clinic.health</td>
+                    <td><span class="badge badge--active">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td>Dr. Sarah Chen</td>
+                    <td>Pediatrics</td>
+                    <td>sarah.chen@clinic.health</td>
+                    <td><span class="badge badge--active">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td>Dr. Michael Ross</td>
+                    <td>Orthopedic Surgery</td>
+                    <td>michael.ross@clinic.health</td>
+                    <td><span class="badge badge--active">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td>Dr. Emily Watson</td>
+                    <td>Dermatology</td>
+                    <td>emily.watson@clinic.health</td>
+                    <td><span class="badge badge--inactive">Inactive</span></td>
+                  </tr>
+                  <tr>
+                    <td>Dr. James Okonkwo</td>
+                    <td>Neurology</td>
+                    <td>james.okonkwo@clinic.health</td>
+                    <td><span class="badge badge--active">Active</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

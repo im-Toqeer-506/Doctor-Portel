@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dr. John Doe — Doctor Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="page-profile">
+    <header class="profile-topbar">
+      <a class="profile-topbar__back" href="index.html">← Back to Dashboard</a>
+      <span class="profile-topbar__app">Doctor Portal</span>
+    </header>
+
+    <div class="profile-container">
+      <section class="profile-hero" aria-labelledby="doctor-name">
+        <div
+          class="profile-hero__photo profile-hero__photo--placeholder"
+          role="img"
+          aria-label="Doctor photo placeholder"
+        >
+          JD
+        </div>
+        <div class="profile-hero__main">
+          <h1 id="doctor-name">Dr. John Doe</h1>
+          <p class="profile-hero__spec">Cardiologist</p>
+          <div class="profile-hero__rating">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <span class="rating-text">4.9 out of 5 · 214 reviews</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="profile-grid profile-grid--single">
+        <section class="profile-card" aria-labelledby="details-heading">
+          <h2 id="details-heading" class="profile-card__title">Details</h2>
+          <dl>
+            <div class="detail-row">
+              <dt>Email</dt>
+              <dd>john.doe@clinic.health</dd>
+            </div>
+            <div class="detail-row">
+              <dt>Phone</dt>
+              <dd>+1 (555) 014-8821</dd>
+            </div>
+            <div class="detail-row">
+              <dt>Experience</dt>
+              <dd>15+ years</dd>
+            </div>
+            <div class="detail-row">
+              <dt>Hospital name</dt>
+              <dd>Metropolitan Heart &amp; Vascular Center</dd>
+            </div>
+          </dl>
+        </section>
+      </div>
+
+      <section class="profile-about" aria-labelledby="about-heading">
+        <h2 id="about-heading">About</h2>
+        <p>
+          Dr. John Doe is a board-certified cardiologist focused on preventive care, heart failure
+          management, and minimally invasive diagnostics. He believes in clear communication and
+          partners with patients to build long-term heart health plans tailored to their lifestyle
+          and goals.
+        </p>
+      </section>
+
+      <section class="profile-cta" aria-label="Book appointment">
+        <p class="profile-cta__text">
+          Ready to schedule a consultation? Use the button below to start the booking flow (UI
+          only).
+        </p>
+        <button type="button" class="btn btn--primary">Book Appointment</button>
+      </section>
+    </div>
+  </body>
+</html>
