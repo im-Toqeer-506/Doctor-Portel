@@ -1,0 +1,113 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f5f7;
+    color: #222;
+}
+
+.page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+.page.narrow {
+    max-width: 480px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0 0 8px 0;
+    font-size: 28px;
+}
+
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+label {
+    display: block;
+    margin: 12px 0 6px 0;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.btn {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 10px 14px;
+    background: #1f6feb;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn.block {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.btn.danger {
+    background: #d92d20;
+}
+
+.alert {
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.alert.error {
+    background: #ffe5e5;
+    color: #a50000;
+}
+
+.alert.success {
+    background: #e8fff1;
+    color: #087443;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.badge {
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    background: #fff3cd;
+    color: #856404;
+}
+
+.muted {
+    color: #666;
+}
