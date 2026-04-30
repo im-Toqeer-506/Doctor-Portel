@@ -1,5 +1,8 @@
 <?php
 // Database connection (edit these values to match your setup)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $host = 'localhost';
 $user = 'root';
 $pass = '';

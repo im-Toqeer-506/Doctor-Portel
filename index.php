@@ -17,8 +17,8 @@
         </header>
 
         <div class="card">
-            <a class="btn block" href="doctor/register.php">Doctor Registration</a>
-            <a class="btn block" href="admin/dashboard.php">Admin Dashboard</a>
+            <a class="btn block" href="auth/login.php">Login</a>
+            <a class="btn block" href="auth/signup.php">Signup</a>
         </div>
     </div>
 </body>

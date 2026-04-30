@@ -43,6 +43,13 @@ CREATE TABLE doctors (
     password VARCHAR(255) NOT NULL,
     status VARCHAR(20) NOT NULL
 );
+
+CREATE TABLE admins (
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   name VARCHAR(100) NOT NULL,
+   email VARCHAR(100) NOT NULL,
+   password VARCHAR(255) NOT NULL
+);
 ```
 
 ## Configure Database Connection
@@ -66,12 +73,13 @@ $dbname = 'doctor_system';
    - Admin Dashboard: http://localhost/Doctor-Portel/admin/dashboard.php
 
 ## System Flow (Simple)
-1. Doctor submits the registration form.
-2. Data is saved in the database with status = 'pending'.
-3. Admin opens dashboard and sees all pending doctors.
-4. Admin clicks Approve (status becomes 'approved') or Delete.
+1. Admin or doctor signs up.
+2. Doctor accounts are saved with status = 'pending'.
+3. Doctor cannot log in until approved by admin.
+4. Admin opens dashboard and sees all pending doctors.
+5. Admin clicks Approve (status becomes 'approved') or Delete.
 
 ## Notes
-- No login or authentication is included.
+- Session-based login is included for admin and doctor.
 - Uses only procedural PHP and mysqli.
 - CSS is intentionally simple for beginners.

@@ -2,6 +2,11 @@
 // Simple admin dashboard (no login)
 require_once('../config/config.php');
 
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+    header('Location: ../auth/login.php');
+    exit;
+}
+
 $message = '';
 if (isset($_GET['msg'])) {
     if ($_GET['msg'] === 'approved') {
@@ -33,6 +38,7 @@ if ($result) {
         <header class="header">
             <h1>Admin Dashboard</h1>
             <p>Pending doctor approvals</p>
+            <p><a class="btn" href="../auth/logout.php">Logout</a></p>
         </header>
 
         <?php if ($message): ?>
