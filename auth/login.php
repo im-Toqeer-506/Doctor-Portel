@@ -3,7 +3,10 @@ require_once('../config/config.php');
 
 $error = '';
 $email = '';
-$role = 'doctor';
+$role = $_GET['role'] ?? 'doctor';
+if ($role !== 'admin' && $role !== 'doctor') {
+    $role = 'doctor';
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $role = $_POST['role'] ?? 'doctor';
@@ -48,8 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 mysqli_stmt_close($stmt);
 
                 if ($doctor && password_verify($password, $doctor['password'])) {
-                    if ($doctor['status'] !== 'approved') {
-                        $error = 'Your account is pending approval.';
+                    if ($doctor['status'] === 'pending') {
+                        $error = 'Waiting for approval';
+                    } elseif ($doctor['status'] === 'rejected') {
+                        $error = 'Your account has been rejected by admin.';
+                    } elseif ($doctor['status'] !== 'approved') {
+                        $error = 'Your account is not active.';
                     } else {
                         $_SESSION['user_role'] = 'doctor';
                         $_SESSION['user_id'] = (int)$doctor['id'];
@@ -80,6 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <header class="header">
             <h1>Login</h1>
             <p>Login as admin or doctor.</p>
+            <p>
+                <a class="btn ghost" href="../index.php">Home</a>
+                <a class="btn ghost" href="register.php">Register</a>
+            </p>
         </header>
         <?php if ($error): ?>
             <div class="alert error"><?php echo htmlspecialchars($error); ?></div>

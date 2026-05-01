@@ -1,59 +1,77 @@
-# Doctor Approval Admin Dashboard (Simple CRUD)
+# Doctor Portal (Basic PHP CRUD)
 
-Beginner-friendly PHP + MySQL project. No login system.
+Simple beginner-friendly project using:
+- Procedural PHP
+- MySQL with `mysqli`
+- HTML + CSS (no framework)
 
-## Requirements
-- XAMPP (Apache + MySQL)
-- PHP (procedural)
-- MySQL / phpMyAdmin
+## Features
+- Admin register + login
+- Doctor register + login
+- Doctor default status is `pending`
+- Doctor login allowed only when status is `approved`
+- Admin dashboard to:
+  - view all doctors
+  - approve doctor
+  - reject doctor
+  - delete doctor
+- Public doctors listing page:
+  - `doctors.php`
+  - shows only approved doctors
 
 ## Folder Structure
-/project-root
+```text
+/Doctor-Portel
+├── config/
+│   └── config.php
 ├── admin/
 │   ├── dashboard.php
+│   ├── approved.php
 │   ├── approve.php
 │   └── delete.php
 ├── doctor/
+│   ├── dashboard.php
 │   └── register.php
-├── config/
-│   └── config.php
-├── auth/ (dummy only)
+├── auth/
 │   ├── login.php
-│   └── signup.php
-├── assets/
-│   └── style.css
-└── index.php
+│   ├── register.php
+│   ├── signup.php
+│   └── logout.php
+├── includes/
+│   ├── header.php
+│   └── footer.php
+├── doctors.php
+├── index.php
+└── assets/style.css
+```
 
-## Database Setup (phpMyAdmin)
-1. Open http://localhost/phpmyadmin
-2. Create a database named: doctor_system
-3. Run this SQL:
+## Database Setup
+1. Open phpMyAdmin.
+2. Create database: `doctor_system`
+3. Run:
 
 ```sql
-CREATE DATABASE doctor_system;
-
+CREATE DATABASE IF NOT EXISTS doctor_system;
 USE doctor_system;
 
-CREATE TABLE doctors (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    specialty VARCHAR(100) NOT NULL,
-    phone VARCHAR(30) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    status VARCHAR(20) NOT NULL
+CREATE TABLE IF NOT EXISTS admins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE admins (
-   id INT AUTO_INCREMENT PRIMARY KEY,
-   name VARCHAR(100) NOT NULL,
-   email VARCHAR(100) NOT NULL,
-   password VARCHAR(255) NOT NULL
+CREATE TABLE IF NOT EXISTS doctors (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  status ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending'
 );
 ```
 
-## Configure Database Connection
-Open config/config.php and update if needed:
+## Configuration
+Check database connection in `config/config.php`:
 
 ```php
 $host = 'localhost';
@@ -62,24 +80,17 @@ $pass = '';
 $dbname = 'doctor_system';
 ```
 
-## How to Run (XAMPP)
-1. Start Apache and MySQL in XAMPP.
-2. Move project folder to:
-   - C:\xampp\htdocs\Doctor-Portel (Windows)
-   - /opt/lampp/htdocs/Doctor-Portel (Linux)
-3. Open in browser:
-   - Home: http://localhost/Doctor-Portel/index.php
-   - Doctor Registration: http://localhost/Doctor-Portel/doctor/register.php
-   - Admin Dashboard: http://localhost/Doctor-Portel/admin/dashboard.php
-
-## System Flow (Simple)
-1. Admin or doctor signs up.
-2. Doctor accounts are saved with status = 'pending'.
-3. Doctor cannot log in until approved by admin.
-4. Admin opens dashboard and sees all pending doctors.
-5. Admin clicks Approve (status becomes 'approved') or Delete.
+## Run
+1. Start Apache and MySQL.
+2. Put project in htdocs.
+3. Open:
+   - Home: `http://localhost/Doctor-Portel/index.php`
+   - Login: `http://localhost/Doctor-Portel/auth/login.php`
+   - Register: `http://localhost/Doctor-Portel/auth/register.php`
+   - Admin dashboard (after admin login): `http://localhost/Doctor-Portel/admin/dashboard.php`
 
 ## Notes
-- Session-based login is included for admin and doctor.
-- Uses only procedural PHP and mysqli.
-- CSS is intentionally simple for beginners.
+- Passwords are stored using `password_hash()`.
+- Logins are checked using `password_verify()`.
+- Sessions are used for authentication.
+- Queries use prepared statements where user input is involved.

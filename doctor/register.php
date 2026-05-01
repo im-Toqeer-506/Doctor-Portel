@@ -7,43 +7,74 @@ $success = '';
 
 $name = '';
 $email = '';
-$specialty = '';
 $phone = '';
+$specialty = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $specialty = trim($_POST['specialty'] ?? '');
     $phone = trim($_POST['phone'] ?? '');
+    $specialty = trim($_POST['specialty'] ?? '');
     $password = $_POST['password'] ?? '';
+    $imagePath = '';
 
-    if ($name === '' || $email === '' || $specialty === '' || $phone === '' || $password === '') {
+    if ($name === '' || $email === '' || $phone === '' || $specialty === '' || $password === '') {
         $error = 'All fields are required.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Please enter a valid email.';
     } else {
-        // Hash password for basic security
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+            if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+                $error = 'Image upload failed. Please try again.';
+            } else {
+                $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+                $fileName = $_FILES['image']['name'] ?? '';
+                $tmpFile = $_FILES['image']['tmp_name'] ?? '';
+                $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-        $stmt = mysqli_prepare(
-            $conn,
-            "INSERT INTO doctors (name, email, specialty, phone, password, status) VALUES (?, ?, ?, ?, ?, 'pending')"
-        );
+                if (!in_array($extension, $allowedExtensions, true)) {
+                    $error = 'Only JPG, JPEG, PNG, and WEBP images are allowed.';
+                } else {
+                    $uploadDirectory = __DIR__ . '/../uploads/doctors/';
+                    if (!is_dir($uploadDirectory)) {
+                        mkdir($uploadDirectory, 0777, true);
+                    }
 
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, 'sssss', $name, $email, $specialty, $phone, $hashed_password);
-            if (mysqli_stmt_execute($stmt)) {
-                $success = 'Registration successful. Waiting for approval.';
-                $name = '';
-                $email = '';
-                $specialty = '';
-                $phone = '';
+                    $newImageName = 'doctor_' . uniqid() . '.' . $extension;
+                    $destination = $uploadDirectory . $newImageName;
+                    if (move_uploaded_file($tmpFile, $destination)) {
+                        $imagePath = 'uploads/doctors/' . $newImageName;
+                    } else {
+                        $error = 'Unable to save image file.';
+                    }
+                }
+            }
+        }
+
+        if ($error === '') {
+            // Hash password for basic security
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            $stmt = mysqli_prepare(
+                $conn,
+                "INSERT INTO doctors (name, email, phone, specialty, image, password, status) VALUES (?, ?, ?, ?, ?, ?, 'pending')"
+            );
+
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, 'ssssss', $name, $email, $phone, $specialty, $imagePath, $hashed_password);
+                if (mysqli_stmt_execute($stmt)) {
+                    $success = 'Registration successful. Waiting for approval.';
+                    $name = '';
+                    $email = '';
+                    $phone = '';
+                    $specialty = '';
+                } else {
+                    $error = 'Database error. Please try again.';
+                }
+                mysqli_stmt_close($stmt);
             } else {
                 $error = 'Database error. Please try again.';
             }
-            mysqli_stmt_close($stmt);
-        } else {
-            $error = 'Database error. Please try again.';
         }
     }
 }
@@ -72,18 +103,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="alert success"><?php echo htmlspecialchars($success); ?></div>
         <?php endif; ?>
 
-        <form class="card" method="POST" action="">
+        <form class="card" method="POST" action="" enctype="multipart/form-data">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" required>
 
             <label for="email">Email</label>
             <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
 
-            <label for="specialty">Specialty</label>
+            <label for="phone">Mobile Phone</label>
+            <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($phone); ?>" required>
+
+            <label for="specialty">Specialization</label>
             <input type="text" id="specialty" name="specialty" value="<?php echo htmlspecialchars($specialty); ?>" required>
 
-            <label for="phone">Phone</label>
-            <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($phone); ?>" required>
+            <label for="image">Profile Picture</label>
+            <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.webp">
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>

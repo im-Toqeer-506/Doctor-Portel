@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
 $doctors = [];
 $result = mysqli_query(
     $conn,
-    "SELECT id, name, email, specialty, phone, status FROM doctors WHERE status = 'approved' ORDER BY id DESC"
+    "SELECT id, name, email, phone, specialty, status FROM doctors WHERE status = 'approved' ORDER BY id DESC"
 );
 if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
@@ -45,8 +45,8 @@ if ($result) {
                             <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Specialty</th>
-                            <th>Phone</th>
+                            <th>Mobile</th>
+                            <th>Specialization</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -56,8 +56,8 @@ if ($result) {
                                 <td><?php echo (int)$doctor['id']; ?></td>
                                 <td><?php echo htmlspecialchars($doctor['name']); ?></td>
                                 <td><?php echo htmlspecialchars($doctor['email']); ?></td>
-                                <td><?php echo htmlspecialchars($doctor['specialty']); ?></td>
-                                <td><?php echo htmlspecialchars($doctor['phone']); ?></td>
+                                <td><?php echo htmlspecialchars($doctor['phone'] ?: '-'); ?></td>
+                                <td><?php echo htmlspecialchars($doctor['specialty'] ?: '-'); ?></td>
                                 <td><?php echo htmlspecialchars($doctor['status']); ?></td>
                             </tr>
                         <?php endforeach; ?>
