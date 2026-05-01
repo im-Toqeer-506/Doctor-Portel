@@ -8,18 +8,7 @@
 </head>
 <body>
     <div class="home">
-        <header class="site-header">
-            <div class="container header-inner">
-                <div class="brand">
-                    <span class="brand-mark">+</span>
-                    <span class="brand-name">Doctor Portel</span>
-                </div>
-                <nav class="nav">
-                    <a href="auth/login.php">Login</a>
-                    <a class="btn" href="auth/signup.php">Signup</a>
-                </nav>
-            </div>
-        </header>
+        <?php include_once __DIR__ . '/includes/header.php'; ?>
 
         <main class="container">
             <section class="hero">
@@ -60,17 +49,12 @@
                     <p>Minimal steps, easy navigation, zero clutter.</p>
                 </div>
             </section>
+
+            <?php include_once __DIR__ . '/sections/about.php'; ?>
+            <?php include_once __DIR__ . '/sections/testimonial.php'; ?>
         </main>
 
-        <footer class="site-footer">
-            <div class="container footer-inner">
-                <p>Doctor Portel - Bringing care together.</p>
-                <div class="footer-links">
-                    <a href="doctor/register.php">Doctor Register</a>
-                    <a href="admin/dashboard.php">Admin Dashboard</a>
-                </div>
-            </div>
-        </footer>
+        <?php include_once __DIR__ . '/includes/footer.php'; ?>
     </div>
 </body>
 </html>
