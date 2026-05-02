@@ -95,6 +95,116 @@ $dbname = 'doctor_system';
 - Sessions are used for authentication.
 - Queries use prepared statements where user input is involved.
 
+## Public Doctor Listing (How It Works)
+
+This project has two public listing views:
+
+1. `index.php` shows a small preview (latest 6 approved doctors).
+2. `doctors.php` shows the full approved doctors directory.
+
+Both pages only show doctors with `status = 'approved'`, so doctors in `pending` or `rejected` are hidden.
+
+### 1) Listing preview on the home page (`index.php`)
+
+The home page runs a SELECT query to fetch only approved doctors and limits it to 6 results:
+
+```php
+$approvedDoctors = [];
+$stmt = mysqli_prepare(
+  $conn,
+  "SELECT name, email, phone, specialty, image FROM doctors WHERE status = 'approved' ORDER BY id DESC LIMIT 6"
+);
+if ($stmt) {
+  mysqli_stmt_execute($stmt);
+  $result = mysqli_stmt_get_result($stmt);
+  while ($result && $row = mysqli_fetch_assoc($result)) {
+    $approvedDoctors[] = $row;
+  }
+  mysqli_stmt_close($stmt);
+}
+```
+
+Then it loops and renders cards safely using `htmlspecialchars`:
+
+```php
+<?php if (!empty($approvedDoctors)): ?>
+  <div class="doctor-cards-grid">
+    <?php foreach ($approvedDoctors as $doctor): ?>
+      <article class="doctor-card">
+        <img
+          src="<?php echo htmlspecialchars($doctor['image'] !== '' ? $doctor['image'] : 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=900&q=60'); ?>"
+          alt="<?php echo htmlspecialchars($doctor['name']); ?>"
+        >
+        <div class="doctor-card-body">
+          <h3><?php echo htmlspecialchars($doctor['name']); ?></h3>
+          <p><strong>Specialization:</strong> <?php echo htmlspecialchars($doctor['specialty'] ?: 'General'); ?></p>
+          <p><strong>Email:</strong> <?php echo htmlspecialchars($doctor['email']); ?></p>
+          <p><strong>Mobile:</strong> <?php echo htmlspecialchars($doctor['phone'] ?: 'Not provided'); ?></p>
+        </div>
+      </article>
+    <?php endforeach; ?>
+  </div>
+<?php else: ?>
+  <div class="card">
+    <p class="muted">No approved doctors to show yet.</p>
+  </div>
+<?php endif; ?>
+```
+
+### 2) Full listing page (`doctors.php`)
+
+This page loads all approved doctors and displays them in a grid:
+
+```php
+$doctors = [];
+$stmt = mysqli_prepare($conn, "SELECT id, name, email, phone, specialty, image, status FROM doctors WHERE status = 'approved' ORDER BY id DESC");
+if ($stmt) {
+  mysqli_stmt_execute($stmt);
+  $result = mysqli_stmt_get_result($stmt);
+  while ($result && $row = mysqli_fetch_assoc($result)) {
+    $doctors[] = $row;
+  }
+  mysqli_stmt_close($stmt);
+}
+```
+
+It then renders each doctor with safe output and default fallbacks:
+
+```php
+<?php if (!empty($doctors)): ?>
+  <?php foreach ($doctors as $doctor): ?>
+    <article class="doctor-card">
+      <img
+        src="<?php echo htmlspecialchars($doctor['image'] !== '' ? $doctor['image'] : 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=900&q=60'); ?>"
+        alt="<?php echo htmlspecialchars($doctor['name']); ?>"
+      >
+      <div class="doctor-card-body">
+        <div class="doctor-card-head">
+          <h3><?php echo htmlspecialchars($doctor['name']); ?></h3>
+          <span class="badge approved"><?php echo htmlspecialchars($doctor['status']); ?></span>
+        </div>
+        <p class="doctor-speciality"><?php echo htmlspecialchars($doctor['specialty'] ?: 'General Medicine'); ?></p>
+        <ul class="doctor-meta-list">
+          <li><strong>Email:</strong> <?php echo htmlspecialchars($doctor['email']); ?></li>
+          <li><strong>Mobile:</strong> <?php echo htmlspecialchars($doctor['phone'] ?: 'Not provided'); ?></li>
+        </ul>
+        <a class="btn block" href="auth/login.php">Book / Contact</a>
+      </div>
+    </article>
+  <?php endforeach; ?>
+<?php else: ?>
+  <div class="card">
+    <p class="muted">No approved doctors available yet.</p>
+  </div>
+<?php endif; ?>
+```
+
+### Why this is safe and clean
+
+- Only approved doctors appear because of the `WHERE status = 'approved'` filter.
+- Output is escaped with `htmlspecialchars(...)` to prevent HTML injection.
+- Fallback values are shown when a specialty, phone, or image is missing.
+
 ---
 
 # Beginner-Friendly Guide: How This PHP CRUD App Works
