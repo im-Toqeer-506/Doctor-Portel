@@ -355,3 +355,195 @@ Tip: keep DB connection in one place and include it where needed.
 4. Open `http://localhost/Doctor-Portel/index.php`.
 
 If you want, I can also walk through the specific files in this project one-by-one.
+
+---
+
+# Login, Signup, and Sessions (Project Guide)
+
+This section explains how login, signup, and sessions work in this project, using code snippets taken directly from the project.
+
+## Login (Admin + Doctor)
+
+Login is handled in `auth/login.php`. It validates input, checks the selected role, then verifies credentials.
+
+```php
+require_once('../config/config.php');
+
+$role = $_GET['role'] ?? 'doctor';
+if ($role !== 'admin' && $role !== 'doctor') {
+  $role = 'doctor';
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $role = $_POST['role'] ?? 'doctor';
+  $email = trim($_POST['email'] ?? '');
+  $password = $_POST['password'] ?? '';
+
+  if ($email === '' || $password === '') {
+    $error = 'Email and password are required.';
+  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $error = 'Please enter a valid email.';
+  } elseif ($role !== 'admin' && $role !== 'doctor') {
+    $error = 'Please select a valid role.';
+  } else {
+    // Role-specific login happens below.
+  }
+}
+```
+
+### Admin login check
+
+```php
+$stmt = mysqli_prepare($conn, 'SELECT id, name, password FROM admins WHERE email = ?');
+mysqli_stmt_bind_param($stmt, 's', $email);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$admin = $result ? mysqli_fetch_assoc($result) : null;
+mysqli_stmt_close($stmt);
+
+if ($admin && password_verify($password, $admin['password'])) {
+  $_SESSION['user_role'] = 'admin';
+  $_SESSION['user_id'] = (int)$admin['id'];
+  $_SESSION['user_name'] = $admin['name'];
+  header('Location: ../admin/dashboard.php');
+  exit;
+}
+```
+
+### Doctor login check (includes approval status)
+
+```php
+$stmt = mysqli_prepare($conn, 'SELECT id, name, password, status FROM doctors WHERE email = ?');
+mysqli_stmt_bind_param($stmt, 's', $email);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$doctor = $result ? mysqli_fetch_assoc($result) : null;
+mysqli_stmt_close($stmt);
+
+if ($doctor && password_verify($password, $doctor['password'])) {
+  if ($doctor['status'] === 'pending') {
+    $error = 'Waiting for approval';
+  } elseif ($doctor['status'] === 'rejected') {
+    $error = 'Your account has been rejected by admin.';
+  } elseif ($doctor['status'] !== 'approved') {
+    $error = 'Your account is not active.';
+  } else {
+    $_SESSION['user_role'] = 'doctor';
+    $_SESSION['user_id'] = (int)$doctor['id'];
+    $_SESSION['user_name'] = $doctor['name'];
+    header('Location: ../doctor/dashboard.php');
+    exit;
+  }
+}
+```
+
+---
+
+## Signup (Admin + Doctor)
+
+Signup is handled in `auth/signup.php`, and `auth/register.php` just includes it.
+
+```php
+// auth/register.php
+require_once __DIR__ . '/signup.php';
+```
+
+### Input handling + password hashing
+
+```php
+$role = $_POST['role'] ?? 'doctor';
+$name = trim($_POST['name'] ?? '');
+$email = trim($_POST['email'] ?? '');
+$phone = trim($_POST['phone'] ?? '');
+$specialty = trim($_POST['specialty'] ?? '');
+$password = $_POST['password'] ?? '';
+
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+```
+
+### Admin signup (insert into admins)
+
+```php
+$check = mysqli_prepare($conn, 'SELECT id FROM admins WHERE email = ?');
+mysqli_stmt_bind_param($check, 's', $email);
+mysqli_stmt_execute($check);
+$result = mysqli_stmt_get_result($check);
+$exists = $result && mysqli_fetch_assoc($result);
+mysqli_stmt_close($check);
+
+if (!$exists) {
+  $stmt = mysqli_prepare($conn, 'INSERT INTO admins (name, email, password) VALUES (?, ?, ?)');
+  mysqli_stmt_bind_param($stmt, 'sss', $name, $email, $hashed_password);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+}
+```
+
+### Doctor signup (insert into doctors with pending status)
+
+```php
+$stmt = mysqli_prepare(
+  $conn,
+  "INSERT INTO doctors (name, email, phone, specialty, image, password, status) VALUES (?, ?, ?, ?, ?, ?, 'pending')"
+);
+mysqli_stmt_bind_param($stmt, 'ssssss', $name, $email, $phone, $specialty, $imagePath, $hashed_password);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
+```
+
+---
+
+## Sessions (Login persistence)
+
+Sessions are started in `config/config.php`, then used in login, dashboard, and logout.
+
+### Start session (config)
+
+```php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+```
+
+### Protect admin pages (example)
+
+```php
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+  header('Location: ../auth/login.php');
+  exit;
+}
+```
+
+### Logout (clear session + cookie)
+
+```php
+$_SESSION = [];
+
+if (ini_get('session.use_cookies')) {
+  $params = session_get_cookie_params();
+  setcookie(
+    session_name(),
+    '',
+    time() - 42000,
+    $params['path'],
+    $params['domain'],
+    $params['secure'],
+    $params['httponly']
+  );
+}
+
+session_destroy();
+header('Location: login.php');
+exit;
+```
+
+---
+
+## Quick Flow Summary
+
+1. Signup inserts a new admin or doctor into the database.
+2. Doctor signup sets status to `pending`.
+3. Login checks email + password.
+4. Admin login goes to admin dashboard.
+5. Doctor login only works after approval.
+6. Sessions store logged-in identity until logout.
