@@ -78,3 +78,22 @@ $columnResult = mysqli_query($conn, "SHOW COLUMNS FROM doctors LIKE 'image'");
 if (!$columnResult || mysqli_num_rows($columnResult) === 0) {
     mysqli_query($conn, "ALTER TABLE doctors ADD COLUMN image VARCHAR(255) DEFAULT NULL AFTER specialty");
 }
+
+/**
+ * Resolve and prepare doctor profile image upload directory (project_root/uploads/doctors).
+ *
+ * @return string|false Absolute path with trailing slash, or false if unusable
+ */
+function ensure_doctor_upload_directory()
+{
+    $dir = dirname(__DIR__) . '/uploads/doctors';
+    if (!is_dir($dir)) {
+        if (!mkdir($dir, 0775, true)) {
+            return false;
+        }
+    }
+    if (!is_writable($dir)) {
+        @chmod($dir, 0775);
+    }
+    return is_writable($dir) ? $dir . '/' : false;
+}

@@ -35,17 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!in_array($extension, $allowedExtensions, true)) {
                     $error = 'Only JPG, JPEG, PNG, and WEBP images are allowed.';
                 } else {
-                    $uploadDirectory = __DIR__ . '/../uploads/doctors/';
-                    if (!is_dir($uploadDirectory)) {
-                        mkdir($uploadDirectory, 0777, true);
-                    }
-
-                    $newImageName = 'doctor_' . uniqid() . '.' . $extension;
-                    $destination = $uploadDirectory . $newImageName;
-                    if (move_uploaded_file($tmpFile, $destination)) {
-                        $imagePath = 'uploads/doctors/' . $newImageName;
+                    $uploadDirectory = ensure_doctor_upload_directory();
+                    if ($uploadDirectory === false) {
+                        $error = 'Upload folder is missing or not writable. Ensure uploads/doctors exists and allow the web server to write to it (e.g. chmod 775 or chown to the Apache user).';
+                    } elseif (!is_uploaded_file($tmpFile)) {
+                        $error = 'Invalid upload. Please choose the image again.';
                     } else {
-                        $error = 'Unable to save image file.';
+                        $newImageName = 'doctor_' . uniqid() . '.' . $extension;
+                        $destination = $uploadDirectory . $newImageName;
+                        if (move_uploaded_file($tmpFile, $destination)) {
+                            $imagePath = 'uploads/doctors/' . $newImageName;
+                        } else {
+                            $error = 'Unable to save image file. Check permissions on uploads/doctors.';
+                        }
                     }
                 }
             }
