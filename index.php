@@ -25,6 +25,7 @@ if ($stmt) {
 </head>
 <body>
     <div class="home">
+        <?php $activePage = 'home'; ?>
         <?php include_once __DIR__ . '/includes/header.php'; ?>
 
         <main class="container">
