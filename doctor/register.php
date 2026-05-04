@@ -91,41 +91,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-    <div class="page narrow">
-        <header class="header">
-            <h1>Doctor Registration</h1>
-            <p>Fill the form and wait for admin approval.</p>
-        </header>
+    <div class="auth-page">
+        <div class="auth-wrapper">
+            <header class="auth-head">
+                <h1>Doctor Registration</h1>
+                <p>Complete the form and wait for admin approval.</p>
+                <div class="top-actions">
+                    <a class="btn ghost" href="../index.php">Home</a>
+                    <a class="btn ghost" href="../auth/login.php">Login</a>
+                </div>
+            </header>
 
-        <?php if ($error): ?>
-            <div class="alert error"><?php echo htmlspecialchars($error); ?></div>
-        <?php endif; ?>
+            <?php if ($error): ?>
+                <div class="alert error"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
 
-        <?php if ($success): ?>
-            <div class="alert success"><?php echo htmlspecialchars($success); ?></div>
-        <?php endif; ?>
+            <?php if ($success): ?>
+                <div class="alert success"><?php echo htmlspecialchars($success); ?></div>
+            <?php endif; ?>
 
-        <form class="card" method="POST" action="" enctype="multipart/form-data">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" required>
+            <form class="card form-grid" method="POST" action="" enctype="multipart/form-data" id="doctor-register-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" required>
+                </div>
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+                </div>
 
-            <label for="phone">Mobile Phone</label>
-            <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($phone); ?>" required>
+                <div class="form-group">
+                    <label for="phone">Mobile Phone</label>
+                    <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($phone); ?>" required>
+                </div>
 
-            <label for="specialty">Specialization</label>
-            <input type="text" id="specialty" name="specialty" value="<?php echo htmlspecialchars($specialty); ?>" required>
+                <div class="form-group">
+                    <label for="specialty">Specialization</label>
+                    <input type="text" id="specialty" name="specialty" value="<?php echo htmlspecialchars($specialty); ?>" required>
+                </div>
 
-            <label for="image">Profile Picture</label>
-            <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.webp">
+                <div class="form-group">
+                    <label for="image">Profile Picture</label>
+                    <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.webp">
+                    <p class="field-note">Optional. JPG, JPEG, PNG, or WEBP.</p>
+                </div>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
 
-            <button class="btn" type="submit">Register</button>
-        </form>
+                <div class="submit-wrap">
+                    <button class="btn block" type="submit" id="doctor-register-submit">Register</button>
+                </div>
+            </form>
+        </div>
     </div>
+    <script>
+        const doctorRegisterForm = document.getElementById('doctor-register-form');
+        const doctorRegisterSubmit = document.getElementById('doctor-register-submit');
+        if (doctorRegisterForm && doctorRegisterSubmit) {
+            doctorRegisterForm.addEventListener('submit', function () {
+                doctorRegisterSubmit.setAttribute('data-loading', 'true');
+                doctorRegisterSubmit.textContent = 'Submitting...';
+            });
+        }
+    </script>
 </body>
 </html>

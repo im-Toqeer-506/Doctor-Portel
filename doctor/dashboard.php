@@ -17,15 +17,21 @@ $name = $_SESSION['user_name'] ?? 'Doctor';
     <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-    <div class="page narrow">
-        <header class="header">
-            <h1>Doctor Dashboard</h1>
-            <p>Welcome, <?php echo htmlspecialchars($name); ?>.</p>
-            <p><a class="btn" href="../auth/logout.php">Logout</a></p>
-        </header>
+    <div class="auth-page">
+        <div class="auth-wrapper">
+            <header class="auth-head">
+                <h1>Doctor Dashboard</h1>
+                <p>Welcome, <?php echo htmlspecialchars($name); ?>.</p>
+                <div class="top-actions">
+                    <a class="btn ghost" href="../doctors.php">Doctors Listing</a>
+                    <a class="btn" href="../auth/logout.php">Logout</a>
+                </div>
+            </header>
 
-        <div class="card">
-            <p>Your account is approved and active.</p>
+            <div class="card">
+                <p>Your account is approved and active.</p>
+                <span class="badge approved">Approved</span>
+            </div>
         </div>
     </div>
 </body>

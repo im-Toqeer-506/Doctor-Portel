@@ -79,8 +79,8 @@ if ($stmt) {
                     </article>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div class="card">
-                    <p class="muted">No approved doctors available yet.</p>
+                <div class="empty-state">
+                    <p>No approved doctors available yet.</p>
                 </div>
             <?php endif; ?>
         </div>

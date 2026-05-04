@@ -83,34 +83,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-    <div class="page narrow">
-        <header class="header">
-            <h1>Login</h1>
-            <p>Login as admin or doctor.</p>
-            <p>
-                <a class="btn ghost" href="../index.php">Home</a>
-                <a class="btn ghost" href="register.php">Register</a>
-            </p>
-        </header>
+    <div class="auth-page">
+        <div class="auth-wrapper">
+            <header class="auth-head">
+                <h1>Welcome Back</h1>
+                <p>Login as admin or doctor to continue.</p>
+                <div class="top-actions">
+                    <a class="btn ghost" href="../index.php">Home</a>
+                    <a class="btn ghost" href="register.php">Register</a>
+                </div>
+            </header>
         <?php if ($error): ?>
             <div class="alert error"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form class="card" method="POST" action="">
-            <label for="role">Login as</label>
-            <select id="role" name="role" required>
-                <option value="doctor" <?php echo $role === 'doctor' ? 'selected' : ''; ?>>Doctor</option>
-                <option value="admin" <?php echo $role === 'admin' ? 'selected' : ''; ?>>Admin</option>
-            </select>
+            <form class="card form-grid" method="POST" action="" id="login-form">
+                <div class="form-group">
+                    <label for="role">Login as</label>
+                    <select id="role" name="role" required>
+                        <option value="doctor" <?php echo $role === 'doctor' ? 'selected' : ''; ?>>Doctor</option>
+                        <option value="admin" <?php echo $role === 'admin' ? 'selected' : ''; ?>>Admin</option>
+                    </select>
+                </div>
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+                </div>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
 
-            <button class="btn" type="submit">Login</button>
-        </form>
+                <div class="submit-wrap">
+                    <button class="btn block" type="submit" id="login-submit">Login</button>
+                </div>
+            </form>
+        </div>
     </div>
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const loginSubmit = document.getElementById('login-submit');
+        if (loginForm && loginSubmit) {
+            loginForm.addEventListener('submit', function () {
+                loginSubmit.setAttribute('data-loading', 'true');
+                loginSubmit.textContent = 'Signing in...';
+            });
+        }
+    </script>
 </body>
 </html>

@@ -148,68 +148,96 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-    <div class="page narrow">
-        <header class="header">
-            <h1>Register</h1>
-            <p>Register as admin or doctor.</p>
-            <p>
-                <a class="btn ghost" href="../index.php">Home</a>
-                <a class="btn ghost" href="login.php">Login</a>
-            </p>
-        </header>
-        <?php if ($error): ?>
-            <div class="alert error"><?php echo htmlspecialchars($error); ?></div>
-        <?php endif; ?>
+    <div class="auth-page">
+        <div class="auth-wrapper">
+            <header class="auth-head">
+                <h1>Create Your Account</h1>
+                <p>Register as admin or doctor.</p>
+                <div class="top-actions">
+                    <a class="btn ghost" href="../index.php">Home</a>
+                    <a class="btn ghost" href="login.php">Login</a>
+                </div>
+            </header>
+            <?php if ($error): ?>
+                <div class="alert error"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
 
-        <?php if ($success): ?>
-            <div class="alert success"><?php echo htmlspecialchars($success); ?></div>
-        <?php endif; ?>
+            <?php if ($success): ?>
+                <div class="alert success"><?php echo htmlspecialchars($success); ?></div>
+            <?php endif; ?>
 
-        <form class="card" method="POST" action="" enctype="multipart/form-data">
-            <label for="role">Register as</label>
-            <select id="role" name="role" required>
-                <option value="doctor" <?php echo $role === 'doctor' ? 'selected' : ''; ?>>Doctor</option>
-                <option value="admin" <?php echo $role === 'admin' ? 'selected' : ''; ?>>Admin</option>
-            </select>
+            <form class="card form-grid" method="POST" action="" enctype="multipart/form-data" id="signup-form">
+                <div class="form-group">
+                    <label for="role">Register as</label>
+                    <select id="role" name="role" required>
+                        <option value="doctor" <?php echo $role === 'doctor' ? 'selected' : ''; ?>>Doctor</option>
+                        <option value="admin" <?php echo $role === 'admin' ? 'selected' : ''; ?>>Admin</option>
+                    </select>
+                </div>
 
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" required>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" required>
+                </div>
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+                </div>
 
-            <div id="doctor-fields">
-                <label for="phone">Mobile Phone</label>
-                <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($phone); ?>">
+                <div id="doctor-fields" class="form-grid">
+                    <div class="form-group">
+                        <label for="phone">Mobile Phone</label>
+                        <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($phone); ?>">
+                    </div>
 
-                <label for="specialty">Specialization</label>
-                <input type="text" id="specialty" name="specialty" value="<?php echo htmlspecialchars($specialty); ?>">
+                    <div class="form-group">
+                        <label for="specialty">Specialization</label>
+                        <input type="text" id="specialty" name="specialty" value="<?php echo htmlspecialchars($specialty); ?>">
+                    </div>
 
-                <label for="image">Profile Picture</label>
-                <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.webp">
-            </div>
+                    <div class="form-group">
+                        <label for="image">Profile Picture</label>
+                        <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.webp">
+                        <p class="field-note">Optional. JPG, JPEG, PNG, or WEBP.</p>
+                    </div>
+                </div>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
 
-            <button class="btn" type="submit">Register</button>
-        </form>
+                <div class="submit-wrap">
+                    <button class="btn block" type="submit" id="signup-submit">Register</button>
+                </div>
+            </form>
+        </div>
     </div>
     <script>
         const roleSelect = document.getElementById('role');
         const doctorFields = document.getElementById('doctor-fields');
         const phoneInput = document.getElementById('phone');
         const specialtyInput = document.getElementById('specialty');
+        const signupForm = document.getElementById('signup-form');
+        const signupSubmit = document.getElementById('signup-submit');
 
         function toggleDoctorFields() {
             const isDoctor = roleSelect.value === 'doctor';
-            doctorFields.style.display = isDoctor ? 'block' : 'none';
+            doctorFields.style.display = isDoctor ? 'grid' : 'none';
             phoneInput.required = isDoctor;
             specialtyInput.required = isDoctor;
         }
 
         roleSelect.addEventListener('change', toggleDoctorFields);
         toggleDoctorFields();
+
+        if (signupForm && signupSubmit) {
+            signupForm.addEventListener('submit', function () {
+                signupSubmit.setAttribute('data-loading', 'true');
+                signupSubmit.textContent = 'Creating account...';
+            });
+        }
     </script>
 </body>
 </html>

@@ -28,43 +28,48 @@ if ($result) {
 </head>
 <body>
     <div class="page">
-        <header class="header">
+        <header class="header listing-hero">
+            <p class="eyebrow">Verified List</p>
             <h1>Approved Doctors</h1>
             <p>Only doctors with approved status.</p>
-            <p>
+            <div class="hero-actions listing-actions">
                 <a class="btn" href="dashboard.php">Back to Dashboard</a>
                 <a class="btn" href="../auth/logout.php">Logout</a>
-            </p>
+            </div>
         </header>
 
-        <div class="card">
+        <div class="card dashboard-table-card">
             <?php if (!empty($doctors)): ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Mobile</th>
-                            <th>Specialization</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($doctors as $doctor): ?>
+                <div class="table-wrap">
+                    <table class="dashboard-table">
+                        <thead>
                             <tr>
-                                <td><?php echo (int)$doctor['id']; ?></td>
-                                <td><?php echo htmlspecialchars($doctor['name']); ?></td>
-                                <td><?php echo htmlspecialchars($doctor['email']); ?></td>
-                                <td><?php echo htmlspecialchars($doctor['phone'] ?: '-'); ?></td>
-                                <td><?php echo htmlspecialchars($doctor['specialty'] ?: '-'); ?></td>
-                                <td><?php echo htmlspecialchars($doctor['status']); ?></td>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Mobile</th>
+                                <th>Specialization</th>
+                                <th>Status</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($doctors as $doctor): ?>
+                                <tr>
+                                    <td><?php echo (int)$doctor['id']; ?></td>
+                                    <td><?php echo htmlspecialchars($doctor['name']); ?></td>
+                                    <td><?php echo htmlspecialchars($doctor['email']); ?></td>
+                                    <td><?php echo htmlspecialchars($doctor['phone'] ?: '-'); ?></td>
+                                    <td><?php echo htmlspecialchars($doctor['specialty'] ?: '-'); ?></td>
+                                    <td class="table-status-cell"><span class="badge approved"><?php echo htmlspecialchars($doctor['status']); ?></span></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             <?php else: ?>
-                <p class="muted">No approved doctors found.</p>
+                <div class="empty-state">
+                    <p>No approved doctors found.</p>
+                </div>
             <?php endif; ?>
         </div>
     </div>

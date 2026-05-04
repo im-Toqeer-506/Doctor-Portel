@@ -128,7 +128,10 @@ if ($stmt) {
                                     alt="<?php echo htmlspecialchars($doctor['name']); ?>"
                                 >
                                 <div class="doctor-card-body">
-                                    <h3><?php echo htmlspecialchars($doctor['name']); ?></h3>
+                                    <div class="doctor-card-status">
+                                        <h3><?php echo htmlspecialchars($doctor['name']); ?></h3>
+                                        <span class="badge approved">Approved</span>
+                                    </div>
                                     <p><strong>Specialization:</strong> <?php echo htmlspecialchars($doctor['specialty'] ?: 'General'); ?></p>
                                     <p><strong>Email:</strong> <?php echo htmlspecialchars($doctor['email']); ?></p>
                                     <p><strong>Mobile:</strong> <?php echo htmlspecialchars($doctor['phone'] ?: 'Not provided'); ?></p>
@@ -137,8 +140,8 @@ if ($stmt) {
                         <?php endforeach; ?>
                     </div>
                 <?php else: ?>
-                    <div class="card">
-                        <p class="muted">No approved doctors to show yet.</p>
+                    <div class="empty-state">
+                        <p>No approved doctors to show yet.</p>
                     </div>
                 <?php endif; ?>
             </section>
