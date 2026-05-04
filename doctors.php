@@ -61,7 +61,7 @@ if ($stmt) {
                 <?php foreach ($doctors as $doctor): ?>
                     <article class="doctor-card">
                         <img
-                            src="<?php echo htmlspecialchars($doctor['image'] !== '' ? $doctor['image'] : 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=900&q=60'); ?>"
+                            src="<?php echo htmlspecialchars(doctor_profile_image_url($doctor['image'] ?? null)); ?>"
                             alt="<?php echo htmlspecialchars($doctor['name']); ?>"
                         >
                         <div class="doctor-card-body">

@@ -97,3 +97,5 @@ function ensure_doctor_upload_directory()
     }
     return is_writable($dir) ? $dir . '/' : false;
 }
+
+require_once __DIR__ . '/image_url.php';
