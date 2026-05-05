@@ -36,12 +36,7 @@ if ($stmt) {
                     <p class="subhead">
                         Manage doctor onboarding, approvals, and patient-facing listings in one clean system.
                     </p>
-                    <div class="hero-actions">
-                        <a class="btn" href="auth/login.php?role=admin">Admin Login</a>
-                        <a class="btn ghost" href="auth/login.php?role=doctor">Doctor Login</a>
-                        <a class="btn ghost" href="auth/register.php?role=doctor">Doctor Register</a>
-                    </div>
-                    <div class="hero-mini-points">
+                <div class="hero-mini-points">
                         <span>Easy Signup</span>
                         <span>Approval Based Login</span>
                         <span>Public Doctor Listing</span>
