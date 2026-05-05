@@ -1,14 +1,14 @@
 <footer class="site-footer">
     <div class="container footer-inner">
         <div class="footer-brand">
-            <p class="footer-title">Doctor Portel</p>
-            <p class="footer-meta">&copy; <?php echo date('Y'); ?> Doctor Portel. Professional healthcare onboarding and directory platform.</p>
+            <p class="footer-meta">&copy; <?php echo date('Y'); ?> Doctor Portel. All rights reserved.</p>
         </div>
-        <div class="footer-links-group">
-            <div class="footer-links footer-links-external">
-                <a href="index.php">Home</a>
-                <a href="doctors.php">Doctors</a>
-                <a href="auth/login.php">Login</a>
+        <div class="footer-faqs">
+            <p class="footer-faqs-title">Common FAQs</p>
+            <div class="footer-links">
+                <a href="doctors.php">How can I find a doctor?</a>
+                <a href="doctor/register.php">How do doctors register?</a>
+                <a href="auth/signup.php">How do I create an account?</a>
             </div>
         </div>
     </div>
